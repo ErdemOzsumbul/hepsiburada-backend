@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = (req, res) => {
   console.log(231);
-  const rawPath = `src/` + req.query.filename;
+  const rawPath = __dirname + `src/` + req.query.filename;
   const options = {
     root: path.join(path.resolve()),
     dotfiles: "deny",
@@ -12,7 +12,7 @@ module.exports = (req, res) => {
     },
   };
   const fileName = req.query.filename;
-  res.sendFile(rawPath, options, err => {
+  res.sendFile(rawPath, options, (err) => {
     if (err) {
       console.error(err);
       res.status(err.status).end();
