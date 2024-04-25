@@ -32,15 +32,15 @@ const Controller = (app) => {
     }
   });
 
-  app.delete("/api/product/delete/all", async (req, res) => {
-    try {
-      await productSchema.deleteMany({});
-      res.send("All products deleted").status(200);
-    } catch (error) {
-      console.error(error.message);
-      res.status(400).send("Bad Request");
-    }
-  });
+  // app.delete("/api/product/delete/all", async (req, res) => {
+  //   try {
+  //     await productSchema.deleteMany({});
+  //     res.send("All products deleted").status(200);
+  //   } catch (error) {
+  //     console.error(error.message);
+  //     res.status(400).send("Bad Request");
+  //   }
+  // });
 
   app.get("/api/picture", picture);
 
