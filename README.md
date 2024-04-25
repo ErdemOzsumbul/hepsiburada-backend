@@ -4,7 +4,6 @@
 
 > ./src/schema/product.js
 ```ruby
-
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -52,3 +51,71 @@ This provides an overview of the code's content and function.
 * **In order to include a product in more than one category, I categorized it with the help of keywords.**
 * **I did not create a collection because I could find products with the help of keywords.**
 ### REST API Explanation:
+`GET /api/products?keyword="necklace"`
+
+```ruby
+axios.get("/api/products", {params: { keyword: "necklace" }});
+```
+
+`Response /api/products?keyword="necklace"`
+
+```ruby
+[
+    {
+        "_id": "662abf3487c9289c326c937e",
+        "name": "The Collection Figaro İnce Model Kolyer",
+        "model": "Figaro",
+        "price": 99,
+        "provinces": [34],
+        "src": "images/necklace/nec2.jpeg",
+        "starRating": 2,
+        "ratingCount": "90",
+        "sellerPoints": 3.4,
+        "keywords": [
+            "kolye",
+            "necklace"
+        ],
+        "tomorrow": false,
+    },
+]
+```
+
+`GET /api/products?search="necklace"`
+
+```ruby
+axios.get("/api/products",
+       {
+              params:{
+                     search: "necklace",
+                     tomorrow:false,
+                     provinces=34,35
+              }
+       }
+);
+```
+
+`Response /api/products?search="kuruyemiş&tomorrow=false&provinces=34,35"`
+
+```ruby
+[
+    {
+        "_id": "662abf3487c9289c326c939c",
+        "name": "Paşa Kuruyemiş Kaju Fıstığı 40 gr x 12 Adet",
+        "model": "Paşa Kuruyemiş",
+        "price": 393,
+        "provinces": [
+            34,
+            35
+        ],
+        "src": "images/snack/snack1.jpg",
+        "starRating": 4,
+        "ratingCount": "20",
+        "sellerPoints": 6.8,
+        "keywords": [
+            "kuruyemis",
+            "snack"
+        ],
+        "tomorrow": false,
+    },
+]
+```
