@@ -5,7 +5,7 @@ const mongoDb = async () => {
   const password = process.env.PASSWORD;
   const cluster = process.env.CLUSTER;
   console.log(email, password, cluster);
-  const uri = `mongodb+srv://${email}:${password}@${cluster}.cg5mxat.mongodb.net/hepsiburada?retryWrites=true&w=majority`;
+  const uri = `mongodb+srv://${email}:${password}@${cluster}.bzgbhlb.mongodb.net/hepsiburada?retryWrites=true&w=majority`;
   const con = mongoose.connection;
 
   mongoose.connection.on("connecting", () => {
@@ -24,12 +24,12 @@ const mongoDb = async () => {
     console.warn("disconnected to mongodb");
   });
 
-  mongoose.connection.on("error", (err) => {
+  mongoose.connection.on("error", err => {
     console.error("connection error:", err);
     mongoose.disconnect();
 
     setTimeout(() => {
-      mongoose.connect(uri).catch((err) => console.error("error"));
+      mongoose.connect(uri).catch(err => console.error("error"));
     }, 5000);
   });
 
@@ -37,7 +37,7 @@ const mongoDb = async () => {
     console.info("reconnected to Mongodb");
   });
 
-  mongoose.connect(uri).catch((err) => console.error("error"));
+  mongoose.connect(uri).catch(err => console.error("error"));
 
   return con;
 };

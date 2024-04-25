@@ -1,320 +1,75 @@
-module.exports = (req, res) => {
+const productSchema = require("../schema/product");
+
+module.exports = async (req, res) => {
   const keyword = req.query.keyword;
   const search = req.query.search;
+  const provinces = req.query.provinces;
+  const tomorrow = req.query.tomorrow;
+  console.log(provinces ? provinces.split(",") : [34, 35]);
   if (search) {
-    res.send(
-      products.filter((product) => product.name.includes(search)) ||
-        products.filter((product) => product.keywords.includes(search))
-    );
+    const data = await productSchema.aggregate([
+      {
+        $match: {
+          $and: [
+            {
+              provinces: {
+                $elemMatch: {
+                  $in: provinces
+                    ? provinces.split(",").map(item => parseInt(item))
+                    : [34, 35],
+                },
+              },
+            },
+            {
+              tomorrow:
+                tomorrow === "true"
+                  ? {
+                      $eq: true,
+                    }
+                  : {
+                      $exists: true,
+                    },
+            },
+          ],
+          $or: [
+            {
+              name: {
+                $regex: search,
+                $options: "i",
+              },
+            },
+            {
+              keywords: {
+                $elemMatch: {
+                  $eq: search,
+                },
+              },
+            },
+          ],
+        },
+      },
+    ]);
+
+    res.send(data).status(200);
   } else if (keyword) {
-    res.send(products.filter((product) => product.keywords.includes(keyword)));
+    try {
+      const data = await productSchema.aggregate([
+        {
+          $match: {
+            keywords: {
+              $elemMatch: {
+                $eq: keyword,
+              },
+            },
+          },
+        },
+      ]);
+      res.send(data).status(200);
+    } catch (error) {
+      console.error(error.message);
+      res.status(400).send("Bad Request");
+    }
   } else {
     res.send("No products found").status(404);
   }
 };
-
-const products = [
-  {
-    src: "images/necklace/nec2.jpeg",
-    name: "The Collection Figaro İnce Model Kolyer",
-    starRating: 2,
-    reviewCount: 90,
-    price: 99.0,
-    tommorow: false,
-    keywords: ["kolye", "necklace"],
-  },
-  {
-    src: "images/necklace/nec4.jpeg",
-    name: "Erkek Kolye Ok Uçlu Metal Kolye",
-    starRating: 2,
-    reviewCount: 33,
-    price: 35.0,
-    tommorow: false,
-    keywords: ["kolye", "necklace"],
-  },
-  {
-    src: "images/necklace/nec5.jpeg",
-    name: "Evorya Paslanmaz Çelik Erkek Gümüş Kolye Renkli",
-    starRating: 4,
-    reviewCount: 400,
-    price: 45.0,
-    tommorow: false,
-    keywords: ["kolye", "necklace"],
-  },
-  {
-    src: "images/necklace/nec6.jpeg",
-    name: "FullControl Casibella Erkek Gri Örme Model",
-    starRating: 4,
-    reviewCount: 345,
-    price: 39.99,
-    tommorow: false,
-    keywords: ["kolye", "necklace"],
-  },
-  {
-    src: "images/necklace/nec7.jpeg",
-    name: "Chavin 15 Mm. Kalın 60 Cm. Taşlı Aloy Erkek Zincir kolye",
-    starRating: 2,
-    reviewCount: 23,
-    price: 329.99,
-    tommorow: false,
-    keywords: ["kolye", "necklace"],
-  },
-  {
-    src: "images/bilg1.jpeg",
-    name: 'Lenovo Ideapad 3 Intel Core i5 1155G7 8GB 512GB SSD Freedos 15.6" FHD...',
-    starstarRating: 5,
-    reviewCount: 344,
-    price: 11899.0,
-    tommorow: false,
-    keywords: ["bilgisayar", "laptop"],
-  },
-  {
-    src: "images/bilg2.jpeg",
-    name: 'Lenovo Ideapad 3 Intel Core i5 1155G7 8GB 512GB SSD Freedos 15.6" FHD...',
-    starstarRating: 5,
-    reviewCount: 344,
-    price: 11899.0,
-    tommorow: false,
-    keywords: ["bilgisayar", "laptop"],
-  },
-  {
-    src: "images/bilg3.jpeg",
-    name: 'Lenovo Ideapad 3 Intel Core i5 1155G7 8GB 512GB SSD Freedos 15.6" FHD...',
-    starstarRating: 5,
-    reviewCount: 344,
-    price: 11899.0,
-    tommorow: false,
-    keywords: ["bilgisayar", "laptop"],
-  },
-  {
-    src: "images/bilg4.jpeg",
-    cardTitle: "Hemen Al Sonra Öde",
-    name: 'Lenovo Ideapad 3 Intel Core i5 1155G7 8GB 512GB SSD Freedos 15.6" FHD...',
-    starstarRating: 5,
-    reviewCount: 344,
-    price: 11899.0,
-    tommorow: false,
-    keywords: ["bilgisayar", "laptop"],
-  },
-  {
-    src: "images/bilg5.jpeg",
-    name: 'Lenovo Ideapad 3 Intel Core i5 1155G7 8GB 512GB SSD Freedos 15.6" FHD...',
-    starstarRating: 5,
-    reviewCount: 344,
-    price: 11899.0,
-    tommorow: false,
-    keywords: ["bilgisayar", "laptop"],
-  },
-  {
-    src: "images/bilg6.jpeg",
-    name: 'Lenovo Ideapad 3 Intel Core i5 1155G7 8GB 512GB SSD Freedos 15.6" FHD...',
-    starstarRating: 5,
-    reviewCount: 344,
-    price: 11899.0,
-    tommorow: false,
-    keywords: ["bilgisayar", "laptop"],
-  },
-  {
-    src: "images/bilg7.jpeg",
-    name: 'Lenovo Ideapad 3 Intel Core i5 1155G7 8GB 512GB SSD Freedos 15.6" FHD...',
-    starstarRating: 5,
-    reviewCount: 344,
-    price: 11899.0,
-    tommorow: false,
-    keywords: ["bilgisayar", "laptop"],
-  },
-  {
-    src: "images/bilg8.jpeg",
-    name: 'Lenovo Ideapad 3 Intel Core i5 1155G7 8GB 512GB SSD Freedos 15.6" FHD...',
-    starstarRating: 5,
-    reviewCount: 344,
-    price: 11899.0,
-    tommorow: false,
-    keywords: ["bilgisayar", "laptop"],
-  },
-  {
-    src: "images/rings/ring2.jpeg",
-    name: "Beyloc Antik Gümüş Kaplama Ayarlanabilir Alyanslar Model Erkek Yüzük Seti",
-    starRating: 2,
-    reviewCount: 45,
-    price: 126.0,
-    tommorow: false,
-    keywords: ["ring", "yüzük"],
-  },
-  {
-    src: "images/rings/ring4.jpeg",
-    name: "Trend Collection Sade Halka Şekilli Ayarlanabilir Siyah Yüzük Küp Bileklik ve Kolye Set",
-    starRating: 4,
-    reviewCount: 103,
-    price: 49.0,
-    tommorow: false,
-    keywords: ["ring", "yüzük"],
-  },
-  {
-    src: "images/rings/ring5.jpeg",
-    name: "Chavin 2mm Söz Nişan Siyah Ip Kap. Bayan Erkek Çelik Yüzük EH23SY",
-    starRating: 2,
-    reviewCount: 34,
-    price: 74.0,
-    tommorow: false,
-    keywords: ["ring", "yüzük"],
-  },
-  {
-    src: "images/rings/ring6.jpeg",
-    name: "Takıfest Kemerli Ay Yıldız Taşlı 925 Ayar Gümüş Erkek Yüzük",
-    starRating: 3,
-    reviewCount: 21,
-    price: 534.99,
-    tommorow: false,
-    keywords: ["ring", "yüzük"],
-  },
-  {
-    src: "images/rings/ring7.jpeg",
-    name: "Chavin Bayan-Erkek Mat Siyah Fırçalanmış Tungsten Yüzük Dm74 14",
-    starRating: 3,
-    reviewCount: 23,
-    price: 357.99,
-    tommorow: false,
-    keywords: ["ring", "yüzük"],
-  },
-  {
-    name: "Ipekyol Askili Crop Triko",
-    src: "images/superPrice/ipekyolTriko.jpeg",
-    price: 149.7,
-    starRating: 3,
-    reviewCount: 23,
-    price: 357.99,
-    tommorow: false,
-    keywords: ["superPrice"],
-  },
-  {
-    name: "adidas Breaknet Court Erkek Spor Ayakkabi",
-    src: "images/superPrice/adidasBreak.jpeg",
-    price: 949.0,
-    starRating: 3,
-    reviewCount: 23,
-    price: 357.99,
-    tommorow: false,
-    keywords: ["superPrice"],
-  },
-  {
-    name: "Jabra Elite 4",
-    src: "images/superPrice/jabraElite4.jpeg",
-    price: 949.0,
-    starRating: 3,
-    reviewCount: 23,
-    price: 357.99,
-    tommorow: false,
-    keywords: ["superPrice"],
-  },
-  {
-    name: "Fenruien Laptop Sirt Cantasi",
-    src: "images/superPrice/fenruien.jpeg",
-    price: 1123.97,
-    starRating: 3,
-    reviewCount: 23,
-    price: 357.99,
-    tommorow: false,
-    keywords: ["superPrice"],
-  },
-  {
-    name: "Acer Nitro 5 AN515 Intel Core Laptop",
-    src: "images/superPrice/acerNitro.jpeg",
-    price: 18999.0,
-    starRating: 3,
-    reviewCount: 23,
-    price: 357.99,
-    tommorow: false,
-    keywords: ["superPrice"],
-  },
-  {
-    src: "images/springShop/spring1.jpeg",
-    name: "U.S. Polo Assn. Erkek Siyah Chinos 50260817-VR046",
-    rating: 4,
-    reviews: 159,
-    price: 836.0,
-    tommorow: false,
-    keywords: ["spring"],
-  },
-  {
-    src: "images/springShop/spring2.jpeg",
-    name: "Madame Coco Margot Çift Kişilik Baskılı Pike - Gri",
-    rating: 4,
-    reviews: 125,
-    price: 343.0,
-    tommorow: false,
-    keywords: ["spring"],
-  },
-  {
-    src: "images/springShop/spring3.jpeg",
-    name: "Ray-Ban 2140 901 50-22 Erkek Güneş Gözlüğü",
-    rating: 3,
-    reviews: 234,
-    price: 2199.99,
-    tommorow: false,
-    keywords: ["spring"],
-  },
-  {
-    src: "images/springShop/spring4.jpeg",
-    name: "MaviMoure Erkek Klasik Kesim Kumaş Pantolon",
-    rating: 4,
-    reviews: 98,
-    price: 299.0,
-    tommorow: false,
-    keywords: ["spring"],
-  },
-  {
-    src: "images/springShop/spring6.jpeg",
-    name: "Trend Vadi Erkek Slim Fit Keten Pantolon - Bej",
-    rating: 3,
-    reviews: 45,
-    price: 259.0,
-    tommorow: false,
-    keywords: ["spring"],
-  },
-  {
-    src: "images/topProducts/topProd1.jpeg",
-    name: "Vivo Y22S 128 GB 6 GB Ram (Vivo Türkiye Garantili)",
-    rating: 3,
-    reviews: 176,
-    price: 6455.0,
-    tommorow: false,
-    keywords: ["trend"],
-  },
-  {
-    src: "images/topProducts/topProd3.jpeg",
-    name: "iPhone 11 128 GB",
-    rating: 4,
-    reviews: 521,
-    price: 17199.99,
-    tommorow: false,
-    keywords: ["trend"],
-  },
-  {
-    src: "images/topProducts/topProd2.jpeg",
-    name: "iPhone 11 64 GB",
-    rating: 4,
-    reviews: 103,
-    price: 15999.0,
-    tommorow: false,
-    keywords: ["trend"],
-  },
-  {
-    src: "images/topProducts/topProd5.jpeg",
-    name: "Smash Platform V3",
-    rating: 3,
-    reviews: 34,
-    price: 1325.0,
-    tommorow: false,
-    keywords: ["trend"],
-  },
-  {
-    src: "images/topProducts/topProd7.jpeg",
-    name: "Tefal EY5018 Easy Fry & Grill Classic Yağsız Fritöz Airfryer 4,2 Litre Kapasite Hava ile Kızartma & Izgara",
-    rating: 4,
-    reviews: 23,
-    price: 3128.0,
-    tommorow: false,
-    keywords: ["trend"],
-  },
-];

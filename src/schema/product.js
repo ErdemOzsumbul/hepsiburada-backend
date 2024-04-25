@@ -4,24 +4,34 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   name: {
     type: String,
-    required: true,
+  },
+  model: {
+    type: String,
   },
   price: {
     type: Number,
-    required: true,
   },
-  rating: {
-    type: Number,
-    required: true,
-  },
-  reviews: {
-    type: String,
-    required: true,
+  provinces: {
+    type: Array,
   },
   src: {
     type: String,
-    required: true,
+  },
+  starRating: {
+    type: Number,
+  },
+  ratingCount: {
+    type: String,
+  },
+  sellerPoints: {
+    type: Number,
+  },
+  keywords: {
+    type: Array,
+  },
+  tomorrow: {
+    type: Boolean,
   },
 });
 
-module.exports = mongoose.model("product", userSchema);
+module.exports = mongoose.model("products", userSchema);

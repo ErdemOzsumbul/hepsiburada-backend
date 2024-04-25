@@ -1,6 +1,7 @@
 const path = require("path");
 
 module.exports = (req, res) => {
+  console.log(231);
   const rawPath = `src/` + req.query.filename;
   const options = {
     root: path.join(path.resolve()),
