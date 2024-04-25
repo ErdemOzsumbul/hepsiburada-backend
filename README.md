@@ -7,12 +7,13 @@
 
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+
 const userSchema = new Schema({
        name: {type: String},
        model: {type: String},
        price: {type: Number},
        provinces: {type: Array},
-       src: { type: String},
+       src: {type: String},
        starRating: {type: Number},
        ratingCount: {type: String},
        sellerPoints: {type: Number},
@@ -44,3 +45,10 @@ module.exports = mongoose.model("products", userSchema);
 ### Module Export
 * **module.exports** = mongoose.model("product", userSchema): Exports the "product" model so it can be used in other files.
 This provides an overview of the code's content and function.
+### Reasons for Using this Database Model: 
+* **Mongoose and MongoDB Integration:** The code uses Mongoose to simplify access to MongoDB, making working with MongoDB straightforward and efficient.
+* **Specific Fields and Relationships:** The product collection's fields (e.g., name, model, price) and relationships (e.g., keywords, provinces) are defined.
+* **Data Manipulation:** The model allows you to perform create, read, update, and delete (CRUD) operations more easily and clearly.
+* **In order to include a product in more than one category, I categorized it with the help of keywords.**
+* **I did not create a collection because I could find products with the help of keywords.**
+### REST API Explanation:
