@@ -1,12 +1,8 @@
 const path = require("path");
 const { dirname } = require("path");
-
 module.exports = (req, res) => {
   console.log(231);
-  const rawPath = path.join(
-    dirname(require.main.filename),
-    `src/` + req.query.filename
-  );
+  const rawPath = dirname(require.main.path) + `src/` + req.query.filename;
   console.log(rawPath);
   const options = {
     root: path.join(path.resolve()),
@@ -16,7 +12,6 @@ module.exports = (req, res) => {
       "x-sent": true,
     },
   };
-  const fileName = req.query.filename;
   res.sendFile(rawPath, options, (err) => {
     if (err) {
       console.error(err);
