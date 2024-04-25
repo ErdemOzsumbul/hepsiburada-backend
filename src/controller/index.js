@@ -3,7 +3,7 @@ const productSchema = require("../schema/product");
 const picture = require("./picture");
 const products = require("./products");
 
-const Controller = app => {
+const Controller = (app) => {
   app.get("/api/products", products);
   app.post("/api/addProduct", (req, res) => {
     const { name, price, rating, reviews, src } = req.body;

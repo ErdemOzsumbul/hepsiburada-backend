@@ -1,8 +1,13 @@
 const path = require("path");
+const { dirname } = require("path");
 
 module.exports = (req, res) => {
   console.log(231);
-  const rawPath = path.join(__dirname, `src/` + req.query.filename);
+  const rawPath = path.join(
+    dirname(require.main.filename),
+    `src/` + req.query.filename
+  );
+  console.log(rawPath);
   const options = {
     root: path.join(path.resolve()),
     dotfiles: "deny",
