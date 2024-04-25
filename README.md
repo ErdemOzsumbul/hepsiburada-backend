@@ -51,7 +51,7 @@ This provides an overview of the code's content and function.
 * **In order to include a product in more than one category, I categorized it with the help of keywords.**
 * **I did not create a collection because I could find products with the help of keywords.**
 ### REST API Explanation:
-`GET /api/products?keyword="necklace"`
+#### `GET /api/products?keyword="necklace"`
 
 ```ruby
 axios.get("/api/products", {params: { keyword: "necklace" }});
@@ -80,7 +80,7 @@ axios.get("/api/products", {params: { keyword: "necklace" }});
 ]
 ```
 
-`GET /api/products?search="necklace"`
+#### `GET /api/products?search="kuruyemiş&tomorrow=false&provinces=34,35"`
 
 ```ruby
 axios.get("/api/products",
@@ -118,4 +118,78 @@ axios.get("/api/products",
         "tomorrow": false,
     },
 ]
+```
+
+#### `POST /api/multiple/addProduct"`
+
+```ruby
+axios.post("/api/multiple/addProduct",
+       {
+              body:{
+                     products:[
+                      {
+                             "name": "Paşa Kuruyemiş Kaju Fıstığı 40 gr x 12 Adet",
+                             "model": "Paşa Kuruyemiş",
+                             "price": 393,
+                             "provinces": [
+                                 34,
+                                 35
+                             ],
+                             "src": "images/snack/snack1.jpg",
+                             "starRating": 4,
+                             "ratingCount": "20",
+                             "sellerPoints": 6.8,
+                             "keywords": [
+                                 "kuruyemis",
+                                 "snack"
+                             ],
+                             "tomorrow": false,
+                         }
+                     ]
+              }
+       }
+);
+```
+
+`Response /api/multiple/addProduct"`
+
+```ruby
+Products added
+```
+
+
+
+#### `POST /api/product/details"`
+
+
+```ruby
+axios.get("/api/product/details",
+       {
+              params:{
+                     id:662abf3487c9289c326c9389
+              }
+       }
+);
+```
+
+ `Response /api/product/details"`
+
+```ruby
+{
+    "_id": "662abf3487c9289c326c9389",
+    "name": "Adidas Breaknet Court Erkek Spor Ayakkabi",
+    "model": "Adidas",
+    "price": 949,
+    "provinces": [
+        35
+    ],
+    "src": "images/superPrice/adidasBreak.jpeg",
+    "starRating": 3,
+    "ratingCount": "23",
+    "sellerPoints": 4.2,
+    "keywords": [
+        "superPrice"
+    ],
+    "tomorrow": false,
+}
 ```
