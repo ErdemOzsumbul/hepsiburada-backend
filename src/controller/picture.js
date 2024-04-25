@@ -5,7 +5,7 @@ module.exports = (req, res) => {
   const rawPath = req.query.filename;
   console.log(rawPath);
   const options = {
-    root: path.join(path.resolve(), "src"),
+    root: path.join(process.cwd(), "src"),
     dotfiles: "deny",
     headers: {
       "x-timestamp": Date.now(),
