@@ -1,14 +1,10 @@
 const path = require("path");
 const fs = require("fs");
 module.exports = (req, res) => {
-  const rawPath = "/src/" + req.query.filename;
-  var filePath = path.join(process.cwd(), rawPath);
-  var stat = fs.statSync(filePath);
-  res.writeHead(200, {
-    "Content-Type": "image/*",
-    "Content-Length": stat.size,
-  });
-
-  var readStream = fs.createReadStream(filePath);
-  readStream.pipe(res);
+  console.log(231);
+  const rawPath = `src/` + req.query.filename;
+  const filePath = path.resolve(".", rawPath);
+  const imageBuffer = fs.readFileSync(filePath);
+  res.setHeader("Content-Type", "image/jpg");
+  res.send(imageBuffer);
 };
